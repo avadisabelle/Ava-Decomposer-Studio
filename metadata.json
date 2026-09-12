@@ -1,0 +1,8 @@
+{
+  "name": "Ava_Decomposer_Studio-19dff4d8-a83f-4f8f-b2f6-8d479ee2e9dd--260218",
+  "description": "A comprehensive visual interface for the Ava Intelligence Suite, integrating LangGraph and LangChain modules for prompt decomposition, narrative intelligence, and relational mapping.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
