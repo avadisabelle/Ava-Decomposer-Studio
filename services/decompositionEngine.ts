@@ -25,11 +25,11 @@ export const loadAvaModules = async (): Promise<ModuleStatus[]> => {
   } catch (err) {
     console.warn('Failed to load module statuses from server, returning fallback status:', err);
     return [
-      { name: 'ava-langgraph-prompt-decomposition-engine', status: 'active', version: '0.1.5' },
-      { name: 'ava-langchain-prompt-decomposition', status: 'active', version: '0.1.6' },
-      { name: 'ava-langgraph-narrative-intelligence', status: 'active', version: '0.1.1' },
-      { name: 'ava-langchain-relational-intelligence', status: 'active', version: '0.1.3' },
-      { name: 'ava-langchain-narrative-tracing', status: 'active', version: '0.1.2' },
+      { name: 'ava-langgraph-prompt-decomposition-engine', status: 'active', version: '0.1.8' },
+      { name: 'ava-langchain-prompt-decomposition', status: 'active', version: '0.1.9' },
+      { name: 'ava-langgraph-narrative-intelligence', status: 'active', version: '0.1.3' },
+      { name: 'ava-langchain-relational-intelligence', status: 'active', version: '0.1.9' },
+      { name: 'ava-langchain-narrative-tracing', status: 'active', version: '0.1.9' },
     ];
   }
 };

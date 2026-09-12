@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
@@ -31,22 +32,35 @@ app.get("/api/health", (_req, res) => {
 
 // Ava Modules Status
 app.get("/api/modules", async (_req, res) => {
-  const modules = [
-    { name: "ava-langgraph-prompt-decomposition-engine", version: "0.1.5" },
-    { name: "ava-langchain-prompt-decomposition", version: "0.1.6" },
-    { name: "ava-langgraph-narrative-intelligence", version: "0.1.1" },
-    { name: "ava-langchain-relational-intelligence", version: "0.1.3" },
-    { name: "ava-langchain-narrative-tracing", version: "0.1.2" },
+  const moduleDefs = [
+    { name: "ava-langgraph-prompt-decomposition-engine", defaultVersion: "0.1.8" },
+    { name: "ava-langchain-prompt-decomposition", defaultVersion: "0.1.9" },
+    { name: "ava-langgraph-narrative-intelligence", defaultVersion: "0.1.3" },
+    { name: "ava-langchain-relational-intelligence", defaultVersion: "0.1.9" },
+    { name: "ava-langchain-narrative-tracing", defaultVersion: "0.1.9" },
   ];
 
   const results = await Promise.all(
-    modules.map(async (mod) => {
+    moduleDefs.map(async (mod) => {
+      let version = mod.defaultVersion;
+      try {
+        const pkgPath = path.join(process.cwd(), "node_modules", mod.name, "package.json");
+        if (fs.existsSync(pkgPath)) {
+          const pkgJson = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+          if (pkgJson.version) {
+            version = pkgJson.version;
+          }
+        }
+      } catch {
+        // use defaultVersion
+      }
+
       try {
         await import(mod.name);
-        return { name: mod.name, status: "active" as const, version: mod.version };
+        return { name: mod.name, status: "active" as const, version };
       } catch (err) {
         console.warn(`[Modules] Failed to load ${mod.name}:`, err);
-        return { name: mod.name, status: "error" as const, version: mod.version };
+        return { name: mod.name, status: "error" as const, version };
       }
     })
   );
@@ -126,8 +140,8 @@ app.post("/api/decompose", async (req, res) => {
       const ai = getAI();
       const enginePersona =
         engineType === "langgraph"
-          ? "Ava LangGraph Engine v0.1.5 (Stateful, Cyclic, Actor-based)"
-          : "Ava LangChain Engine v0.1.6 (Linear, Chain-based, Traceable)";
+          ? "Ava LangGraph Engine v0.1.8 (Stateful, Cyclic, Actor-based)"
+          : "Ava LangChain Engine v0.1.9 (Linear, Chain-based, Traceable)";
 
       const styleInstruction =
         engineType === "langgraph"
